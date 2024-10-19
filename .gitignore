@@ -24,3 +24,4 @@ ENV/
 dist/
 build/
 
+.env
