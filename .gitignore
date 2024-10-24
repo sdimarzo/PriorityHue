@@ -25,3 +25,6 @@ dist/
 build/
 
 .env
+
+checkpoint_dir/
+pretrained_res18_unet.pth

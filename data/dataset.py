@@ -16,11 +16,11 @@ class Dataset(Dataset):
         if split == 'train':
             # Horizontal flip for data augmentation while training
             self.transform = transforms.Compose([
-                transforms.Resize((IMG_SIZE, IMG_SIZE)),
+                transforms.Resize((IMG_SIZE, IMG_SIZE), Image.BICUBIC),
                 transforms.RandomHorizontalFlip(),
             ])
         elif split == 'val':
-            self.transform = transforms.Resize((IMG_SIZE, IMG_SIZE))
+            self.transform = transforms.Resize((IMG_SIZE, IMG_SIZE), Image.BICUBIC)
 
         self.split = split
 

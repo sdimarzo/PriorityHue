@@ -2,15 +2,14 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 from fastai.vision.learner import create_body
-from torchvision.models import resnet18
+from torchvision.models import resnet18, ResNet18_Weights
 from fastai.vision.models import unet
 from config import *
 from data.dataset import create_dataloader
 
-
 def build_res_unet(n_input=1, n_output=2, size=IMG_SIZE):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    resnet = resnet18(pretrained=True)
+    resnet = resnet18(weights=ResNet18_Weights.DEFAULT)
     body = create_body(resnet, pretrained=True, n_in=n_input, cut=-2)
     net = unet.DynamicUnet(body, n_output, (size, size)).to(device)
     return net
