@@ -2,6 +2,8 @@
 
 PriorityHue is a deep learning-based colorization tool that takes black-and-white images and returns colorized versions using a Generative Adversarial Network (GAN) model.
 
+![Colorization Example](./sample_output.png)
+
 ## Prerequisites
 
 - Python 3.x
