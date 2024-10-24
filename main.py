@@ -1,3 +1,4 @@
+import argparse
 import torch
 from torchvision import transforms
 from PIL import Image
@@ -13,29 +14,32 @@ from utils.lab_to_rgb import lab_to_rgb
 import os
 import tempfile
 from utils.get_test_output import colorize_random_images
+from utils.colorize_img import colorize_img
 
 def main():
+    parser = argparse.ArgumentParser(description="Colorize a black and white image.")
+    parser.add_argument('-i', '--input', required=True, help="Path to the input image")
+    parser.add_argument('-o', '--output', default='.', help="Path to the output directory (default: current directory)")
+    parser.add_argument('-n', '--name', default="results", help="Name of the output file (without extension)")
+    args = parser.parse_args()
+
     # Load the model
     netG = build_res_unet()
     model = ColorizationModel(netG)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    # Load the checkpoint (final_model.pth)
     checkpoint = torch.load("./checkpoints/final_model.pth", map_location=device)
-    
-    # Check the content of the checkpoint
     if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint:
-        # If the checkpoint is a dict with 'model_state_dict', use that
         state_dict = checkpoint['model_state_dict']
     else:
-        # Otherwise, assume the entire checkpoint is the state dict
         state_dict = checkpoint
     
     model.load_state_dict(state_dict, strict=False)
     model.to(device)
     
-    # Run the colorization function to create sample outputs
-    colorize_random_images(model, VAL_PATH, num_images=15, output_dir='sample_output')
+    # Colorize the input image
+    output_path = colorize_img(model, args.input, args.output, args.name)
+    print(f"Colorized image saved to: {output_path}")
 
 if __name__ == "__main__":
     main()
